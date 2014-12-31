@@ -21,11 +21,11 @@ and is <b>NOT</b> production ready yet, however you are free to try it out
 <ul>Python 3.x support</ul>
 <ul>Fully automated unit testing</ul>
 <ul>1993 and 2003 specifications of the protocol</ul>
-<ul>EBCDIC support</ul>
 </li>
 <b>Things that might work</b> (aka Wishlist):<br/>
 <li>
 <ul>Predefined (and ready to use) popular implementations</ul>
+<ul>EBCDIC support</ul>
 </li>
 <br/>
 <h4>How to use:</h4>
