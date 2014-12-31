@@ -19,6 +19,7 @@ and is <b>NOT</b> production ready yet, however you are free to try it out
 <li>
 <ul>Proper documentation</ul>
 <ul>Python 3.x support</ul>
+<ul>Fully automated unit testing</ul>
 <ul>1993 and 2003 specifications of the protocol</ul>
 <ul>EBCDIC support</ul>
 </li>
