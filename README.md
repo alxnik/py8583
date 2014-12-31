@@ -11,7 +11,7 @@ and is <b>NOT</b> production ready yet, however you are free to try it out
 <h4>Status:</h4>
 <b>Things working:</b><br/>
 <li>
-<ul>iso-8583/1987 parsing and building</ul>
+<ul>iso-8583/1987 parsing and building up to 64 fields</ul>
 <ul>Support of BCD/Binary/ASCII variations in field lengths and field data (where applicable)</ul>
 <ul>Python 2.7 support</ul>
 </li>
@@ -20,6 +20,7 @@ and is <b>NOT</b> production ready yet, however you are free to try it out
 <ul>Proper documentation</ul>
 <ul>Python 3.x support</ul>
 <ul>Fully automated unit testing</ul>
+<ul>128 data fields (secondary bitmap)</ul>
 <ul>1993 and 2003 specifications of the protocol</ul>
 </li>
 <b>Things that might work</b> (aka Wishlist):<br/>
