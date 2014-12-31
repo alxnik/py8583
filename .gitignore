@@ -56,3 +56,5 @@ target/
 # py8583 specific
 # contains all the files containing test iso messages
 iso/
+/.pydevproject
+/.project
