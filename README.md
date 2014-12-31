@@ -35,7 +35,8 @@ The module's external module dependencies are:
 <ul>struct</ul>
 <ul>enum34 (for python &lt; 3.4)</ul>
 </li>
-This paragraph will eventually have some basic/quick examples too
+This paragraph will eventually have some basic/quick examples too. Until then, please have a look at the IsoHost.py file which contains a simple server which waits for ISO messages, parses them and replies in a hardcoded manner.
+
 <br/>
 <h4>License:</h4>
 All the work is licensed under LGPL 2.1. Since LGPL is not very python focused, as the copyright holder, my intentions 
