@@ -1,43 +1,12 @@
 import socket
 import sys
-import traceback
 import struct
 import os
 
-from py8583 import Iso8583, MemDump, DT, LT, Str2Bcd, Int2Bcd
+from py8583 import Iso8583, MemDump, Str2Bcd
 
-class TestIso(Iso8583):
-    def Config(self):
-        self.SetDataType('MTI', DT.BCD)
-        self.SetDataType('Bitmap', DT.BIN)
-        
-            
-        for i in range(0,128):
-            if i in self.DataTypes.keys():
-                if self.GetContentType(i) == 'n' or self.GetContentType(i) == 'z':
-                    self.SetDataType(i, DT.BCD)
-                    
-                    if('LenDataType' in self.DataTypes[i]):
-                        self.DataTypes[i]['LenDataType'] = DT.BCD
     
-                elif self.GetContentType(i) == 'b':
-                    self.SetDataType(i, DT.BIN)
-                
-        self.DataTypes[60]['LenDataType'] = DT.BCD
-        self.SetContentType(60, 'b')
-        self.SetDataType(60, DT.BIN)
-        
-        self.DataTypes[48]['LenDataType'] = DT.BCD
-        self.SetContentType(48, 'b')
-        self.SetDataType(48, DT.BIN)
-        
-        self.DataTypes[63]['LenDataType'] = DT.BCD
-        self.SetContentType(63, 'b')
-        self.SetDataType(63, DT.BIN)
-        
-        self.DataTypes[55]['LenDataType'] = DT.BCD
-        self.SetContentType(55, 'b')
-        self.SetDataType(55, DT.BIN)
+from py8583spec import IsoSpec1987BCD
 
 
 
@@ -71,17 +40,18 @@ while True:
             conn.close()
             continue
         
-        IsoPacket = TestIso(data[2:])
+        IsoPacket = Iso8583(data[2:], IsoSpec1987BCD())
+        
         IsoPacket.PrintMessage()
         
-        IsoPacket.MTI = "0210"
+        IsoPacket.MTI("0210")
         
-        IsoPacket.SetField(39)
-        IsoPacket.FieldData[39] = "00"
-        IsoPacket.ResetField(2)
-        IsoPacket.ResetField(35)
-        IsoPacket.ResetField(52)
-        IsoPacket.ResetField(60)
+        IsoPacket.Field(39, 1)
+        IsoPacket.FieldData(39, "00")
+        IsoPacket.Field(2, 0)
+        IsoPacket.Field(35, 0)
+        IsoPacket.Field(52, 0)
+        IsoPacket.Field(60, 0)
          
         data = IsoPacket.BuildIso()
         data = Str2Bcd("{0:04d}".format(len(data))) + data
@@ -90,7 +60,7 @@ while True:
         
     except Exception, ex:
         print ex
-#         print(traceback.format_exc())
+        
     conn.close()
     
 s.close()
