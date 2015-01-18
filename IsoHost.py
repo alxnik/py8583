@@ -53,10 +53,14 @@ while True:
         IsoPacket.Field(52, 0)
         IsoPacket.Field(60, 0)
          
+        print("\n\n\n")
+        IsoPacket.PrintMessage()
         data = IsoPacket.BuildIso()
-        data = Str2Bcd("{0:04d}".format(len(data))) + data
+        data = struct.pack("!H", len(data)) + data
+         
         MemDump("Sending:", data)
         conn.send(data)
+        
         
     except Exception, ex:
         print ex
