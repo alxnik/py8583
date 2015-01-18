@@ -101,23 +101,23 @@ class Iso8583:
         DataType = self.__IsoSpec.DataType('MTI')
         
         if(DataType == DT.BCD):
-            self.MTI = Bcd2Str(self.iso[p:p+2])
+            self.__MTI = Bcd2Str(self.iso[p:p+2])
             p+=2
         elif(DataType == DT.ASCII):
-            self.MTI = self.iso[p:p+4]
+            self.__MTI = self.iso[p:p+4]
             p+=4
         
         try: # MTI should only contain numbers
-            int(self.MTI)
+            int(self.__MTI)
         except:
-            raise ParseError("Invalid MTI: [{0}]".format(self.MTI))
+            raise ParseError("Invalid MTI: [{0}]".format(self.__MTI))
             
         if(self.Strict == True):
-            if(self.MTI[1] == '0'):
-                raise ParseError("Invalid MTI: Invalid Message type [{0}]".format(self.MTI))
+            if(self.__MTI[1] == '0'):
+                raise ParseError("Invalid MTI: Invalid Message type [{0}]".format(self.__MTI))
                   
-            if(int(self.MTI[3]) > 5):
-                raise ParseError("Invalid MTI: Invalid Message origin [{0}]".format(self.MTI))
+            if(int(self.__MTI[3]) > 5):
+                raise ParseError("Invalid MTI: Invalid Message origin [{0}]".format(self.__MTI))
         
         return p
     
@@ -190,7 +190,7 @@ class Iso8583:
             raise ParseError("Cannot parse F{0}: Invalid length".format(field))
             
         if(Len > MaxLength):
-            raise ParseError("F{0} is larger than maximum length ({1}>{2})".format(field, Len, self.DataTypes[field]['MaxLen']))
+            raise ParseError("F{0} is larger than maximum length ({1}>{2})".format(field, Len, MaxLength))
         
 
         try:
@@ -238,9 +238,9 @@ class Iso8583:
 
     def BuildMTI(self):
         if(self.__IsoSpec.DataType('MTI') == DT.BCD):
-            self.iso += Str2Bcd(self.MTI)
+            self.iso += Str2Bcd(self.__MTI)
         elif(self.__IsoSpec.DataType('MTI') == DT.ASCII):
-            self.iso += self.MTI
+            self.iso += self.__MTI
     
     
     def BuildBitmap(self):
@@ -362,21 +362,21 @@ class Iso8583:
 
     def MTI(self, MTI = None):
         if(MTI == None):
-            return self.MTI
+            return self.__MTI
         else:
             try: # MTI should only contain numbers
-                int(self.MTI)
+                int(MTI)
             except:
-                raise SpecError("Invalid MTI [{0}]: MTI must contain only numbers".format(self.MTI))
+                raise SpecError("Invalid MTI [{0}]: MTI must contain only numbers".format(MTI))
         
             if(self.Strict == True):
-                if(self.MTI[1] == '0'):
-                    raise SpecError("Invalid MTI [{0}]: Invalid Message type".format(self.MTI))
+                if(MTI[1] == '0'):
+                    raise SpecError("Invalid MTI [{0}]: Invalid Message type".format(MTI))
                       
-                if(int(self.MTI[3]) > 5):
-                    raise SpecError("Invalid MTI [{0}]: Invalid Message origin".format(self.MTI))
+                if(int(MTI[3]) > 5):
+                    raise SpecError("Invalid MTI [{0}]: Invalid Message origin".format(MTI))
             
-            self.MTI = MTI
+            self.__MTI = MTI
 
 
     def Description(self, field, Description = None):
@@ -391,15 +391,19 @@ class Iso8583:
 
 
     def PrintMessage(self):
-        print("MTI:    [{0}]".format(self.MTI))
+        print("MTI:    [{0}]".format(self.__MTI))
         
         print "Fields: [",
-        for i in sorted(self.__FieldData.keys()):
-            print str(i),
+        for i in sorted(self.__Bitmap.keys()):
+            if(i == 1): 
+                continue
+            if(self.__Bitmap[i] == 1):
+                print str(i),
         print "]"
 
-        for i in sorted(self.__FieldData.keys()):
-            print("\t{0:02d} - {1: <40} : [{2}]".format(i, self.__IsoSpec.Description(i), self.__FieldData[i]))
-         
-        
-        
+        for i in sorted(self.__Bitmap.keys()):
+            if(i == 1): 
+                continue
+            if(self.__Bitmap[i] == 1):
+                print("\t{0:02d} - {1: <41} : [{2}]".format(i, self.__IsoSpec.Description(i), self.__FieldData[i]))
+
