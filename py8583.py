@@ -333,7 +333,7 @@ class Iso8583:
         self.BuildBitmap()
         
         for field in self.__Bitmap:
-            if(self.Field(field) == 1):
+            if(field != 1 and self.Field(field) == 1):
                 self.BuildField(field)
                 
         return self.iso
