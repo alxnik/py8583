@@ -36,14 +36,24 @@ class AsciiParse1987(unittest.TestCase):
                 self.IsoPacket.SetIsoContent(MTI)
                 
     def test_Bitmap(self):
+        
+        # Primary bitmap
         for shift in range(0, 63):
             bitmap = '{:0>16X}'.format(1 << shift)
             content = '0200' +  bitmap + ''.zfill(256)
 
             self.IsoPacket.SetIsoContent(content)
             self.assertEqual(self.IsoPacket.Bitmap()[64 - shift], 1)
+            self.assertEqual(self.IsoPacket.Field(64 - shift), 1)
             
-        pass
+        # Secondary bitmap
+        for shift in range(0, 64):
+            bitmap = '8{:0>31X}'.format(1 << shift)
+            content = '0200' +  bitmap + ''.zfill(256)
+            
+            self.IsoPacket.SetIsoContent(content)
+            self.assertEqual(self.IsoPacket.Bitmap()[128 - shift], 1)
+            self.assertEqual(self.IsoPacket.Field(128 - shift), 1)
                 
 class BCDParse1987(unittest.TestCase):
     
