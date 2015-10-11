@@ -362,7 +362,7 @@ class Iso8583:
             
             
     def Bitmap(self):
-        return self.__Bitmap    
+        return self.__Bitmap
 
     def MTI(self, MTI = None):
         if(MTI == None):
