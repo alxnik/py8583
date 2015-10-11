@@ -20,20 +20,20 @@ class AsciiParse1987(unittest.TestCase):
                 for b3 in range(0,9):
                     for b4 in range(0, 5):
                         MTI = str(b1) + str(b2) + str(b3) + str(b4)
-                        self.IsoPacket.SetIsoContent(MTI + "0000000000000000")
+                        self.IsoPacket.SetIsoContent((MTI + "0000000000000000").encode('latin'))
                         self.assertEqual(self.IsoPacket.MTI(), MTI)
     
         # negative test
         with self.assertRaisesRegexp(py8583.ParseError, "Invalid MTI"):
-            self.IsoPacket.SetIsoContent("000A")
+            self.IsoPacket.SetIsoContent("000A".encode('latin'))
             
         with self.assertRaisesRegexp(py8583.ParseError, "Invalid MTI"):
-            self.IsoPacket.SetIsoContent("0000")
+            self.IsoPacket.SetIsoContent("0000".encode('latin'))
             
         for b4 in range(6, 9):
             with self.assertRaisesRegexp(py8583.ParseError, "Invalid MTI"):
                 MTI = "010" + str(b4)
-                self.IsoPacket.SetIsoContent(MTI)
+                self.IsoPacket.SetIsoContent(MTI.encode('latin'))
                 
     def test_Bitmap(self):
         
@@ -42,7 +42,7 @@ class AsciiParse1987(unittest.TestCase):
             bitmap = '{:0>16X}'.format(1 << shift)
             content = '0200' +  bitmap + ''.zfill(256)
 
-            self.IsoPacket.SetIsoContent(content)
+            self.IsoPacket.SetIsoContent(content.encode('latin'))
             self.assertEqual(self.IsoPacket.Bitmap()[64 - shift], 1)
             self.assertEqual(self.IsoPacket.Field(64 - shift), 1)
             
@@ -51,7 +51,7 @@ class AsciiParse1987(unittest.TestCase):
             bitmap = '8{:0>31X}'.format(1 << shift)
             content = '0200' +  bitmap + ''.zfill(256)
             
-            self.IsoPacket.SetIsoContent(content)
+            self.IsoPacket.SetIsoContent(content.encode('latin'))
             self.assertEqual(self.IsoPacket.Bitmap()[128 - shift], 1)
             self.assertEqual(self.IsoPacket.Field(128 - shift), 1)
                 
