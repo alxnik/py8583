@@ -4,7 +4,7 @@ from py8583spec import IsoSpec1987BCD, IsoSpec1987ASCII
 import binascii
 import unittest
 
-class AsciiParse(unittest.TestCase):
+class AsciiParse1987(unittest.TestCase):
     
     def setUp(self):
         self.IsoPacket = Iso8583(IsoSpec = IsoSpec1987ASCII())
@@ -38,7 +38,7 @@ class AsciiParse(unittest.TestCase):
     def test_Bitmap(self):
         pass
                 
-class BCDParse(unittest.TestCase):
+class BCDParse1987(unittest.TestCase):
     
     def setUp(self):
         self.IsoPacket = Iso8583(IsoSpec = IsoSpec1987BCD())
