@@ -193,6 +193,9 @@ class Iso8583:
         if(Len > MaxLength):
             raise ParseError("F{0} is larger than maximum length ({1}>{2})".format(field, Len, MaxLength))
         
+        # In case of zero length, don't try to parse the field itself, just continue
+        if(Len == 0):
+            return p
 
         try:
             if(DataType == DT.ASCII):
