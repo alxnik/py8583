@@ -251,9 +251,16 @@ class Iso8583:
     def BuildBitmap(self):
         DataType = self.__IsoSpec.DataType(1)
         
+        # check if we need a secondary bitmap
+        for i in self.__Bitmap.keys():
+            if(i > 64):
+                self.__Bitmap[1] = 1
+                break
+        
         IntPrimary = 0
         for i in range(1, 65):
-            IntPrimary |= (self.__Bitmap[i] & 0x1) << (64 - i)
+            if i in self.__Bitmap.keys():
+                IntPrimary |= (self.__Bitmap[i] & 0x1) << (64 - i)
 
         Primary = struct.pack("!Q", IntPrimary)
 
@@ -261,6 +268,19 @@ class Iso8583:
             self.iso += Primary
         elif(DataType == DT.ASCII):
             self.iso += binascii.hexlify(Primary)
+            
+            
+        IntSecondary = 0
+        for i in range(65, 129):
+            if i in self.__Bitmap.keys():
+                IntSecondary |= (self.__Bitmap[i] & 0x1) << (128 - i)
+                
+        Secondary = struct.pack("!Q", IntSecondary)
+
+        if(DataType == DT.BIN):
+            self.iso += Secondary
+        elif(DataType == DT.ASCII):
+            self.iso += binascii.hexlify(Secondary)
             
             
     def BuildField(self, field):
