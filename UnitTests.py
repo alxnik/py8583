@@ -36,6 +36,13 @@ class AsciiParse1987(unittest.TestCase):
                 self.IsoPacket.SetIsoContent(MTI)
                 
     def test_Bitmap(self):
+        for shift in range(0, 63):
+            bitmap = '{:0>16X}'.format(1 << shift)
+            content = '0200' +  bitmap + ''.zfill(256)
+
+            self.IsoPacket.SetIsoContent(content)
+            self.assertEqual(self.IsoPacket.Bitmap()[64 - shift], 1)
+            
         pass
                 
 class BCDParse1987(unittest.TestCase):
