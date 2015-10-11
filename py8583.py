@@ -164,10 +164,11 @@ class Iso8583:
             raise SpecError("Cannot parse F{0}: Incomplete field specification".format(field))
 
         try:
+            if(DataType == DT.ASCII and ContentType == 'b'):
+                MaxLength *= 2
+                
             if(LenType == LT.FIXED):
                 Len = MaxLength
-                if(DataType == DT.ASCII and ContentType == 'b'):
-                    Len *= 2
             elif(LenType == LT.LVAR):
                 pass
             elif(LenType == LT.LLVAR):
