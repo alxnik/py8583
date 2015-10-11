@@ -8,12 +8,11 @@ This is an implementation of the de-facto protocol for banking applications, iso
 
 * iso-8583/1987 parsing and building
 * Support of BCD/Binary/ASCII variations in field lengths and field data (where applicable)
-* Python 2.7 support
+* Python 2.7 and 3.x support
 
 **Things that will work** (aka TODO List):
 
 * Proper documentation
-* Python 3.x support
 * Fully automated unit testing
 * 1993 and 2003 specifications of the protocol
 
