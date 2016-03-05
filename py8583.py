@@ -450,5 +450,10 @@ class Iso8583:
             if(i == 1): 
                 continue
             if(self.__Bitmap[i] == 1):
-                print("\t{0:>3d} - {1: <41} : [{2}]".format(i, self.__IsoSpec.Description(i), self.__FieldData[i]))
-
+                
+                FieldData = self.__FieldData[i]
+                
+                if(self.ContentType(i) == 'n' and self.__IsoSpec.LengthType(i) == LT.FIXED):
+                    FieldData = str(FieldData).zfill(self.__IsoSpec.MaxLength(i))
+                    
+                print("\t{0:>3d} - {1: <41} : [{2}]".format(i, self.__IsoSpec.Description(i), FieldData))
