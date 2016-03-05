@@ -2,7 +2,7 @@ from py8583 import DT, LT, SpecError
     
 
             
-class IsoSpec():
+class IsoSpec(object):
     __ValidContentTypes = ('a', 'n', 's', 'an', 'as', 'ns', 'ans', 'b', 'z')
     
     Descriptions = {}
