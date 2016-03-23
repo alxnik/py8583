@@ -1,3 +1,8 @@
+import os
+import time
+
+sys.path.insert(0, os.path.abspath('..'))
+
 import py8583
 from py8583 import Iso8583, MemDump, DT, LT
 from py8583spec import IsoSpec1987BCD, IsoSpec1987ASCII

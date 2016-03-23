@@ -73,7 +73,6 @@ class BuildError(Exception):
                 return repr(self.str)
             
             
-import py8583spec    
 class Iso8583:
 
     
