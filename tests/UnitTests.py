@@ -1,18 +1,19 @@
 import os
 import time
+import sys
+import binascii
+import unittest
 
 sys.path.insert(0, os.path.abspath('..'))
 
-import py8583
-from py8583 import Iso8583, MemDump, DT, LT
-from py8583spec import IsoSpec1987BCD, IsoSpec1987ASCII
-import binascii
-import unittest
+from py8583 import *
+
+
 
 class AsciiParse1987(unittest.TestCase):
     
     def setUp(self):
-        self.IsoPacket = Iso8583(IsoSpec = IsoSpec1987ASCII())
+        self.IsoPacket = py8583.Iso8583(IsoSpec = py8583spec.IsoSpec1987ASCII())
         self.IsoPacket.Strict(True)
     
     def tearDown(self):
@@ -63,7 +64,7 @@ class AsciiParse1987(unittest.TestCase):
 class BCDParse1987(unittest.TestCase):
     
     def setUp(self):
-        self.IsoPacket = Iso8583(IsoSpec = IsoSpec1987BCD())
+        self.IsoPacket = py8583.Iso8583(IsoSpec = py8583spec.IsoSpec1987BCD())
         self.IsoPacket.Strict(True)
     
     def tearDown(self):
