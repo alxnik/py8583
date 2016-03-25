@@ -24,8 +24,6 @@ This is an implementation of the de-facto protocol for banking applications, iso
 #### How to use:
 The module's external module dependencies are:
 
-* binascii
-* struct
 * enum34 (for python &lt; 3.4)
     
 This paragraph will eventually have some basic/quick examples too. Until then, please have a look at the IsoHost.py file which contains a simple server which waits for ISO messages, parses them and replies in a hardcoded manner.
