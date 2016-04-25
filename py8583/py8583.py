@@ -74,23 +74,17 @@ class BuildError(Exception):
             
             
 class Iso8583:
-
     
     ValidContentTypes = ('a', 'n', 's', 'an', 'as', 'ns', 'ans', 'b', 'z')
-
-    Strict = False
-    
-    __Bitmap = {}
-    __FieldData = {}
-    __iso = b''
-    
-    def Strict(self, Value):
-        if(Value != True and Value != False):
-            raise ValueError
-        self.Strict = Value
     
     
     def __init__(self,IsoMsg = None, IsoSpec = None):
+        
+        self.Strict = False
+    
+        self.__Bitmap = {}
+        self.__FieldData = {}
+        self.__iso = b''
         
         if(IsoSpec != None):
             self.__IsoSpec = IsoSpec
@@ -103,7 +97,14 @@ class Iso8583:
             
             self.__iso = IsoMsg
             self.ParseIso()
-            
+
+
+    def Strict(self, Value):
+        if(Value != True and Value != False):
+            raise ValueError
+        self.Strict = Value
+
+        
     def SetIsoContent(self, IsoMsg):
         if( isinstance(IsoMsg, bytes) == False ):
             raise TypeError("Expected bytes for iso message")
