@@ -369,7 +369,7 @@ class Iso8583:
         self.BuildMTI()
         self.BuildBitmap()
         
-        for field in self.__Bitmap:
+        for field in sorted(self.__Bitmap):
             if(field != 1 and self.Field(field) == 1):
                 self.BuildField(field)
                 
