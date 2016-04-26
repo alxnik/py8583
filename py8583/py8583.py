@@ -385,9 +385,11 @@ class Iso8583:
             try:
                 return self.__Bitmap[field]
             except KeyError:
-                return 0
+                return None
+        elif(Value == 1 or Value == 0):
+            self.__Bitmap[field] = Value
         else:
-            self.__Bitmap[field] = Value 
+            raise ValueError 
             
 
     def FieldData(self, field, Value = None):
@@ -395,8 +397,11 @@ class Iso8583:
             try:
                 return self.__FieldData[field]
             except KeyError:
-                return 0
+                return None
         else:
+            if(len(str(Value)) > self.__IsoSpec.MaxLength(field)):
+                raise ValueError('Value length larger than field maximum ({0})'.format(self.__IsoSpec.MaxLength(field)))
+            
             self.__FieldData[field] = Value 
             
             
@@ -410,14 +415,14 @@ class Iso8583:
             try: # MTI should only contain numbers
                 int(MTI)
             except:
-                raise SpecError("Invalid MTI [{0}]: MTI must contain only numbers".format(MTI))
+                raise ValueError("Invalid MTI [{0}]: MTI must contain only numbers".format(MTI))
         
             if(self.Strict == True):
                 if(MTI[1] == '0'):
-                    raise SpecError("Invalid MTI [{0}]: Invalid Message type".format(MTI))
+                    raise ValueError("Invalid MTI [{0}]: Invalid Message type".format(MTI))
                       
                 if(int(MTI[3]) > 5):
-                    raise SpecError("Invalid MTI [{0}]: Invalid Message origin".format(MTI))
+                    raise ValueError("Invalid MTI [{0}]: Invalid Message origin".format(MTI))
             
             self.__MTI = MTI
 
