@@ -247,7 +247,7 @@ class Iso8583:
         p = self.ParseBitmap(p)
 
 
-        for field in self.__Bitmap:
+        for field in sorted(self.__Bitmap):
             # field 1 is parsed by the bitmap function
             if(field != 1 and self.Field(field) == 1):
                 p = self.ParseField(field, p)
