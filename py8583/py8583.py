@@ -456,7 +456,10 @@ class Iso8583:
                 continue
             if(self.__Bitmap[i] == 1):
                 
-                FieldData = self.__FieldData[i]
+                try:
+                    FieldData = self.__FieldData[i]
+                except KeyError:
+                    FieldData = ''
                 
                 if(self.ContentType(i) == 'n' and self.__IsoSpec.LengthType(i) == LT.FIXED):
                     FieldData = str(FieldData).zfill(self.__IsoSpec.MaxLength(i))
