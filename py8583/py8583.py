@@ -482,8 +482,6 @@ class Iso8583:
             if(self.__Bitmap[i] == 1):
                 dict_msg['bitmap'].append(i)
         
-        dict_msg['bitmap_string'] = ''.join(["F{0:>03d}".format(f) for f in dict_msg['bitmap']])
-
         for i in sorted(self.__Bitmap.keys()):
             if(i == 1): 
                 continue
