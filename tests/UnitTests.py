@@ -95,5 +95,5 @@ class BCDParse1987(unittest.TestCase):
     def test_Bitmap(self):
         pass
                 
-    
-    
+if __name__ == '__main__':
+    unittest.main()
