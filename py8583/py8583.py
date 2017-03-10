@@ -80,7 +80,7 @@ class Iso8583:
     
     def __init__(self,IsoMsg = None, IsoSpec = None):
         
-        self.Strict = False
+        self.strict = False
     
         self.__Bitmap = {}
         self.__FieldData = {}
@@ -102,7 +102,7 @@ class Iso8583:
     def Strict(self, Value):
         if(Value != True and Value != False):
             raise ValueError
-        self.Strict = Value
+        self.strict = Value
 
         
     def SetIsoContent(self, IsoMsg):
@@ -128,7 +128,7 @@ class Iso8583:
         except:
             raise ParseError("Invalid MTI: [{0}]".format(self.__MTI))
             
-        if(self.Strict == True):
+        if(self.strict == True):
             if(self.__MTI[1] == '0'):
                 raise ParseError("Invalid MTI: Invalid Message type [{0}]".format(self.__MTI))
                   
@@ -417,7 +417,7 @@ class Iso8583:
             except:
                 raise ValueError("Invalid MTI [{0}]: MTI must contain only numbers".format(MTI))
         
-            if(self.Strict == True):
+            if(self.strict == True):
                 if(MTI[1] == '0'):
                     raise ValueError("Invalid MTI [{0}]: Invalid Message type".format(MTI))
                       
