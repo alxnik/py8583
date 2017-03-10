@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='py8583',
-      version='1.0',
+      version='1.1',
       
       description='ISO8583 python library',
       long_description=open('README.md').read(),

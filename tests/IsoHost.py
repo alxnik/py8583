@@ -3,10 +3,11 @@ import sys
 import struct
 import os
 
-from py8583 import Iso8583, MemDump, Str2Bcd
-
+#from py8583 import ISO8583, MemDump, Str2Bcd
+#import py8583
+from py8583 import py8583, py8583spec
     
-from py8583spec import IsoSpec1987BCD
+#from py8583spec import IsoSpec1987BCD
 
 
 
@@ -40,7 +41,7 @@ while True:
             conn.close()
             continue
         
-        IsoPacket = Iso8583(data[2:], IsoSpec1987BCD())
+        IsoPacket = ISO8583(data[2:], IsoSpec1987BCD())
         
         IsoPacket.PrintMessage()
         

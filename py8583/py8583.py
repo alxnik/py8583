@@ -73,7 +73,7 @@ class BuildError(Exception):
                 return repr(self.str)
             
             
-class Iso8583:
+class ISO8583:
     
     ValidContentTypes = ('a', 'n', 's', 'an', 'as', 'ns', 'ans', 'b', 'z')
     
