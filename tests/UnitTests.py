@@ -13,7 +13,7 @@ from py8583 import *
 class AsciiParse1987(unittest.TestCase):
     
     def setUp(self):
-        self.IsoPacket = py8583.Iso8583(IsoSpec = py8583spec.IsoSpec1987ASCII())
+        self.IsoPacket = py8583.ISO8583(IsoSpec = py8583spec.IsoSpec1987ASCII())
         self.IsoPacket.Strict(True)
     
     def tearDown(self):
@@ -64,7 +64,7 @@ class AsciiParse1987(unittest.TestCase):
 class BCDParse1987(unittest.TestCase):
     
     def setUp(self):
-        self.IsoPacket = py8583.Iso8583(IsoSpec = py8583spec.IsoSpec1987BCD())
+        self.IsoPacket = py8583.ISO8583(IsoSpec = py8583spec.IsoSpec1987BCD())
         self.IsoPacket.Strict(True)
     
     def tearDown(self):
