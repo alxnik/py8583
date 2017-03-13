@@ -1,4 +1,4 @@
-from py8583.py8583 import DT, LT, SpecError
+from py8583 import DT, LT, SpecError
     
 
             
