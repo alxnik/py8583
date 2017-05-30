@@ -84,6 +84,7 @@ class Iso8583:
     
         self.__Bitmap = {}
         self.__FieldData = {}
+        self.__FieldLen = {}
         self.__iso = b''
         
         if(IsoSpec != None):
@@ -195,6 +196,9 @@ class Iso8583:
                 elif(LenDataType == DT.BCD):
                     Len = Bcd2Int(self.__iso[p:p+1])
                     p+=1
+                elif(LenDataType == DT.BIN):
+                    Len = struct.unpack('!B', self.__iso[p:p+1])[0]
+                    p+=1
             elif(LenType == LT.LLLVAR):
                 LenDataType = self.__IsoSpec.LengthDataType(field)
                 if(LenDataType == DT.ASCII):
@@ -203,11 +207,16 @@ class Iso8583:
                 elif(LenDataType == DT.BCD):
                     Len = Bcd2Int(self.__iso[p:p+2])
                     p+=2
+                elif(LenDataType == DT.BIN):
+                    Len = struct.unpack('!H', self.__iso[p:p+2])[0]
+                    p+=2
         except ValueError:
             raise ParseError("Cannot parse F{0}: Invalid length".format(field))
             
         if(Len > MaxLength):
             raise ParseError("F{0} is larger than maximum length ({1}>{2})".format(field, Len, MaxLength))
+
+        self.__FieldLen[field] = Len
         
         # In case of zero length, don't try to parse the field itself, just continue
         if(Len == 0):
@@ -463,5 +472,37 @@ class Iso8583:
                 
                 if(self.ContentType(i) == 'n' and self.__IsoSpec.LengthType(i) == LT.FIXED):
                     FieldData = str(FieldData).zfill(self.__IsoSpec.MaxLength(i))
+
+                Len = self.__FieldLen[i]
+                print("\t{0:>3d} - {1: <41} :({2:>3d}) [{3}]".format(i, self.__IsoSpec.Description(i), Len, FieldData))
+       
+    def DictMessage(self):
+        dict_msg = {}
+        
+        dict_msg['mti'] = "{0}".format(self.__MTI)
+        dict_msg['bitmap'] = []
+        
+        for i in sorted(self.__Bitmap.keys()):
+            if(i == 1): 
+                continue
+            if(self.__Bitmap[i] == 1):
+                dict_msg['bitmap'].append(i)
+        
+        for i in sorted(self.__Bitmap.keys()):
+            if(i == 1): 
+                continue
+            if(self.__Bitmap[i] == 1):
+                
+                try:
+                    FieldData = self.__FieldData[i]
+                except KeyError:
+                    FieldData = ''
+                
+                if(self.ContentType(i) == 'n' and self.__IsoSpec.LengthType(i) == LT.FIXED):
+                    FieldData = str(FieldData).zfill(self.__IsoSpec.MaxLength(i))
                     
-                print("\t{0:>3d} - {1: <41} : [{2}]".format(i, self.__IsoSpec.Description(i), FieldData))
+                Len = self.__FieldLen[i]
+                
+                dict_msg["F{0:>03d}".format(i)] = {'data': FieldData, 'length': Len}
+        
+        return dict_msg 
