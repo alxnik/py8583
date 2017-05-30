@@ -196,6 +196,9 @@ class Iso8583:
                 elif(LenDataType == DT.BCD):
                     Len = Bcd2Int(self.__iso[p:p+1])
                     p+=1
+                elif(LenDataType == DT.BIN):
+                    Len = struct.unpack('!B', self.__iso[p:p+1])[0]
+                    p+=1
             elif(LenType == LT.LLLVAR):
                 LenDataType = self.__IsoSpec.LengthDataType(field)
                 if(LenDataType == DT.ASCII):
@@ -203,6 +206,9 @@ class Iso8583:
                     p+=3
                 elif(LenDataType == DT.BCD):
                     Len = Bcd2Int(self.__iso[p:p+2])
+                    p+=2
+                elif(LenDataType == DT.BIN):
+                    Len = struct.unpack('!H', self.__iso[p:p+2])[0]
                     p+=2
         except ValueError:
             raise ParseError("Cannot parse F{0}: Invalid length".format(field))
