@@ -1,6 +1,7 @@
 import binascii
 import struct
 from enum import Enum
+import logging
 
 # Data Type enumeration
 class DT(Enum):
@@ -15,26 +16,41 @@ class LT(Enum):
     LLVAR   = 2
     LLLVAR  = 3
 
-def MemDump(Title, data):
-    i = 1
+log = logging.getLogger('py8583')
+
+
+def MemDump(Title, data, size = 16):
+    from string import printable as PrintableString
+    printable = bytes(PrintableString, 'ascii').replace(b'\r', b'').replace(b'\n', b'') \
+                                               .replace(b'\t', b'').replace(b'\x0b', b'') \
+                                               .replace(b'\x0c', b'')
 
     if( isinstance(data, bytes) == False ):
         raise TypeError("Expected bytes for data")
 
-    print(Title)
+    log.info("{} [{}]:".format(Title, len(data)))
     TheDump = ""
     
-    for c in data:
-        try: # python 3
-            TheDump += "{:02x} ".format(c) 
-        except: # python 2.x
-            TheDump += "{:02x} ".format(ord(c))
+    for line in [data[i:i+size] for i in range(0, len(data), size)]:
         
-        if(i % 16 == 0):
-            TheDump += "\n"
-        i+=1
+        for c in line:
+            try: # python 3
+                TheDump += "{:02x} ".format(c) 
+            except: # python 2.x
+                TheDump += "{:02x} ".format(ord(c))
+            
+        TheDump += "   " * (size - len(line))
+            
+        TheDump += ' | '
+        for c in line:
+            if c in printable:
+                TheDump += "{:1c}".format(c)
+            else:
+                TheDump += '.'
+            
+        TheDump += "\n"
        
-    print(TheDump)
+    log.info(TheDump)
     
 
 def Bcd2Str(bcd):
@@ -439,7 +455,7 @@ class Iso8583:
 
 
     def PrintMessage(self):
-        print("MTI:    [{0}]".format(self.__MTI))
+        log.info("MTI:    [{0}]".format(self.__MTI))
         
         bitmapLine = "Fields: [ "
         for i in sorted(self.__Bitmap.keys()):
@@ -448,7 +464,7 @@ class Iso8583:
             if(self.__Bitmap[i] == 1):
                 bitmapLine += str(i) + " "
         bitmapLine += "]"
-        print(bitmapLine)
+        log.info(bitmapLine)
         
 
         for i in sorted(self.__Bitmap.keys()):
@@ -464,4 +480,4 @@ class Iso8583:
                 if(self.ContentType(i) == 'n' and self.__IsoSpec.LengthType(i) == LT.FIXED):
                     FieldData = str(FieldData).zfill(self.__IsoSpec.MaxLength(i))
                     
-                print("\t{0:>3d} - {1: <41} : [{2}]".format(i, self.__IsoSpec.Description(i), FieldData))
+                log.info("\t{0:>3d} - {1: <41} : [{2}]".format(i, self.__IsoSpec.Description(i), FieldData))
