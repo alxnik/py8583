@@ -247,8 +247,8 @@ class Iso8583:
             elif(DataType == DT.BIN):
                 self.__FieldData[field] = binascii.hexlify(self.__iso[p:p+(Len)]).decode('latin').upper()
                 p += Len
-        except:
-            raise ParseError("Cannot parse F{0}".format(field))
+        except Exception as ex:
+            raise ParseError("Cannot parse F{}: {}".format(field, str(ex))) from None
         
         if(ContentType == 'z'):
             self.__FieldData[field] = self.__FieldData[field].replace("D", "=") # in track2, replace d with =  
