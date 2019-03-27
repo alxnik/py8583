@@ -453,9 +453,12 @@ class Iso8583:
         return self.__IsoSpec.ContentType(field, ContentType)
 
 
+    # Due to legacy...
+    def PrintMessage(self, level = logging.DEBUG):
+        self.DebugMessage(level)
 
-    def PrintMessage(self):
-        log.info("MTI:    [{0}]".format(self.__MTI))
+    def DebugMessage(self, level = logging.DEBUG):
+        log.log(level, "MTI:    [{0}]".format(self.__MTI))
         
         bitmapLine = "Fields: [ "
         for i in sorted(self.__Bitmap.keys()):
@@ -464,7 +467,7 @@ class Iso8583:
             if(self.__Bitmap[i] == 1):
                 bitmapLine += str(i) + " "
         bitmapLine += "]"
-        log.info(bitmapLine)
+        log.log(level, bitmapLine)
         
 
         for i in sorted(self.__Bitmap.keys()):
@@ -480,4 +483,4 @@ class Iso8583:
                 if(self.ContentType(i) == 'n' and self.__IsoSpec.LengthType(i) == LT.FIXED):
                     FieldData = str(FieldData).zfill(self.__IsoSpec.MaxLength(i))
                     
-                log.info("\t{0:>3d} - {1: <41} : [{2}]".format(i, self.__IsoSpec.Description(i), FieldData))
+                log.log(level, "\t{0:>3d} - {1: <41} : [{2}]".format(i, self.__IsoSpec.Description(i), FieldData))
