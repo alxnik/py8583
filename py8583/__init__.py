@@ -1,1 +1,2 @@
-__all__ = ['py8583', 'py8583spec']
+from . import py8583
+from . import py8583spec

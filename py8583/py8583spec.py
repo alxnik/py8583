@@ -1,4 +1,4 @@
-from py8583.py8583 import DT, LT, SpecError
+from .py8583 import DT, LT, SpecError
     
 
             
@@ -86,6 +86,14 @@ class IsoSpec1987ASCII(IsoSpec1987):
             self.DataType(field, DT.ASCII)
             if(self.LengthType(field) != LT.FIXED):
                 self.LengthDataType(field, DT.ASCII)
+                
+class BICISO(IsoSpec1987ASCII):
+    def SetContentTypes(self):
+        super(BICISO, self).SetContentTypes()
+        
+        # Variations between official ISO and BIC ISO
+        self.ContentTypes[41]['MaxLen'] = 16
+        self.ContentTypes[44]['MaxLen'] = 27
                 
 class IsoSpec1987BCD(IsoSpec1987):
     def SetDataTypes(self):
