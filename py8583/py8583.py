@@ -431,13 +431,14 @@ class Iso8583:
         
         for field in sorted(self.__Bitmap):
             if(field != 1 and self.Field(field) == 1):
-                self.BuildField(field)
+                try:
+                    self.BuildField(field)
+                except Exception as ex:
+                    raise type(ex)('Error building F{}: '.format(field) + repr(ex)) from None
+
                 
         return self.__iso
     
-    
-    
-
         
     def Field(self, field, Value = None):
         if(Value == None):
