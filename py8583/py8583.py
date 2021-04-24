@@ -474,6 +474,8 @@ class Iso8583:
         if(MTI == None):
             return self.__MTI
         else:
+            MTI = MTI.zfill(4)
+            
             if int(MTI[0]) not in list(map(int, MsgVersion)):
                 raise ValueError("Invalid MTI [{0}]: Invalid message version".format(MTI))
 
