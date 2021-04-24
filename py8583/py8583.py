@@ -462,8 +462,10 @@ class Iso8583:
             if(len(str(Value)) > self.__IsoSpec.MaxLength(field)):
                 raise ValueError('Value length larger than field maximum ({0})'.format(self.__IsoSpec.MaxLength(field)))
             
-            self.__FieldData[field] = Value 
-            
+            self.__FieldData[field] = Value
+
+    def Fields(self):
+        return self.__FieldData
             
     def Bitmap(self):
         return self.__Bitmap
