@@ -382,6 +382,16 @@ class Iso8583:
             LenDataType = self.__IsoSpec.LengthDataType(field)
             
             data = "{0}".format(self.__FieldData[field])
+
+            if(ContentType == 'z' and DataType == DT.BIN):
+                if(len(data) % 2 == 1):
+                    data = data + 'F'
+
+                data = data.replace("=", "D")
+                    
+
+
+
             Len = len(data)
             if(DataType == DT.BIN):
                 Len //=2
@@ -405,11 +415,6 @@ class Iso8583:
             elif(LenDataType == DT.BIN):
                 self.__iso += binascii.unhexlify(LenData)
             
-            
-        if(ContentType == 'z'):
-            data = data.replace("=", "D")
-            if(len(data) % 2 == 1):
-                data = data + 'F'
         
         if(DataType == DT.ASCII):
             self.__iso += data.encode('latin')
