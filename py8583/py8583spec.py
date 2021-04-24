@@ -96,16 +96,16 @@ class BICISO(IsoSpec1987ASCII):
         self.ContentTypes[44]['MaxLen'] = 27
                 
 class IsoSpec1987BCD(IsoSpec1987):
-    def SetDataTypes(self):
-        self.DataType('MTI', DT.BCD)
-        self.DataType(1, DT.BIN) # bitmap 
-        
+    def SetContentTypes(self):
         # Most popular BCD implementations use the reserved/private fields
         # as binary, so we have to set them as such in contrast to the ISO spec
         for field in self.ContentTypes.keys():
             if(self.MaxLength(field) == 999):
                 self.ContentType(field, 'b')
-        
+
+    def SetDataTypes(self):
+        self.DataType('MTI', DT.BCD)
+        self.DataType(1, DT.BIN) # bitmap
         
         for field in self.ContentTypes.keys():
             
