@@ -219,10 +219,10 @@ class Iso8583:
             
             for i in range(1, 65):
                 self.__Bitmap[i+64] = (IntSecondary >> (64 - i)) & 0x1
-            
+
         return p
-            
-            
+
+
     def ParseField(self, field, p):
         
         try:
@@ -265,6 +265,10 @@ class Iso8583:
         
         # In case of zero length, don't try to parse the field itself, just continue
         if(Len == 0):
+            if(ContentType == 'n'):
+                self.__FieldData[field] = None
+            else:
+                self.__FieldData[field] = ''
             return p
 
         try:
