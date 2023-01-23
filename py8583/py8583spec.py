@@ -15,11 +15,12 @@ class IsoSpec(object):
         self.SetDataTypes()
     
     def SetDescriptions(self):
-        pass
+        raise NotImplementedError()
     def SetContentTypes(self):
-        pass
+        raise NotImplementedError()
     def SetDataTypes(self):
-        pass
+        raise NotImplementedError()
+
          
     def Description(self, field, Description = None):
         if(Description == None):
@@ -87,6 +88,7 @@ class IsoSpec1987ASCII(IsoSpec1987):
             if(self.LengthType(field) != LT.FIXED):
                 self.LengthDataType(field, DT.ASCII)
                 
+
 class BICISO(IsoSpec1987ASCII):
     def SetContentTypes(self):
         super(BICISO, self).SetContentTypes()
@@ -97,6 +99,7 @@ class BICISO(IsoSpec1987ASCII):
                 
 class IsoSpec1987BCD(IsoSpec1987):
     def SetContentTypes(self):
+        super().SetContentTypes()
         # Most popular BCD implementations use the reserved/private fields
         # as binary, so we have to set them as such in contrast to the ISO spec
         for field in self.ContentTypes.keys():
