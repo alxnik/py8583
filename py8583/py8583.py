@@ -341,7 +341,7 @@ class Iso8583:
         if(DataType == DT.BIN):
             self.__iso += Primary
         elif(DataType == DT.ASCII):
-            self.__iso += binascii.hexlify(Primary)
+            self.__iso += binascii.hexlify(Primary).upper()
             
         # Add secondary bitmap if applicable
         if 1 in self.__Bitmap.keys() and self.__Bitmap[1] == 1:
