@@ -67,8 +67,8 @@ def MemDump(Title, data, size = 16):
         raise TypeError("Expected bytes for data")
 
     log.info("{} [{}]:".format(Title, len(data)))
-    TheDump = ""
-    
+    TheDump = "\n"
+
     for line in [data[i:i+size] for i in range(0, len(data), size)]:
         
         for c in line:
@@ -236,7 +236,7 @@ class Iso8583:
         try:
             if(DataType == DT.ASCII and ContentType == 'b'):
                 MaxLength *= 2
-                
+
             if(LenType == LT.FIXED):
                 Len = MaxLength
             elif(LenType == LT.LVAR):
@@ -249,6 +249,8 @@ class Iso8583:
                 elif(LenDataType == DT.BCD):
                     Len = Bcd2Int(self.__iso[p:p+1])
                     p+=1
+                else:
+                    raise ParseError('Unsupported length data type')
             elif(LenType == LT.LLLVAR):
                 LenDataType = self.__IsoSpec.LengthDataType(field)
                 if(LenDataType == DT.ASCII):
@@ -257,8 +259,10 @@ class Iso8583:
                 elif(LenDataType == DT.BCD):
                     Len = Bcd2Int(self.__iso[p:p+2])
                     p+=2
-        except ValueError:
-            raise ParseError("Cannot parse F{0}: Invalid length".format(field))
+                else:
+                    raise ParseError('Unsupported length data type')
+        except ValueError as ex:
+            raise ParseError("Cannot parse F{0} - Invalid length: {1}".format(field, ex))
             
         if(Len > MaxLength):
             raise ParseError("F{0} is larger than maximum length ({1}>{2})".format(field, Len, MaxLength))

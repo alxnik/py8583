@@ -15,11 +15,11 @@ class IsoSpec(object):
         self.SetDataTypes()
     
     def SetDescriptions(self):
-        raise NotImplementedError()
+        pass
     def SetContentTypes(self):
-        raise NotImplementedError()
+        pass
     def SetDataTypes(self):
-        raise NotImplementedError()
+        pass
 
          
     def Description(self, field, Description = None):
@@ -56,7 +56,7 @@ class IsoSpec(object):
         if(LengthType == None):
             return self.ContentTypes[field]['LenType']
         else:
-            if(LengthType not in self.__ValidContentTypes):
+            if(LengthType not in LT):
                 raise SpecError("Cannot set Length type '{0}' for F{1}: Invalid length type".format(LengthType, field))
             self.ContentTypes[field]['LenType'] = LengthType
     
@@ -70,7 +70,7 @@ class IsoSpec(object):
                 self.DataTypes[field] = {}
             self.DataTypes[field]['Length'] = LengthDataType
     
-    
+
     
 class IsoSpec1987(IsoSpec):
     def SetDescriptions(self):
@@ -109,11 +109,11 @@ class IsoSpec1987BCD(IsoSpec1987):
     def SetDataTypes(self):
         self.DataType('MTI', DT.BCD)
         self.DataType(1, DT.BIN) # bitmap
-        
+
         for field in self.ContentTypes.keys():
-            
+
             ContentType = self.ContentType(field)
-            
+
             if('a' in ContentType or 's' in ContentType):
                 self.DataType(field, DT.ASCII)
             elif(ContentType == 'b'):
@@ -124,7 +124,27 @@ class IsoSpec1987BCD(IsoSpec1987):
             if(self.LengthType(field) != LT.FIXED):
                 self.LengthDataType(field, DT.BCD)
 
+class IsoSpec1993(IsoSpec):
+    def SetDescriptions(self):
+        self.Descriptions = Descriptions['1993']
+    def SetContentTypes(self):
+        self.ContentTypes = ContentTypes['1993']
+
+
+class IsoSpec1993ASCII(IsoSpec1993):
+    def SetDataTypes(self):
+        self.DataType('MTI', DT.ASCII)
+        self.DataType(1, DT.ASCII) # bitmap
+
+        for field in self.ContentTypes.keys():
+            self.DataType(field, DT.ASCII)
+            if(self.LengthType(field) != LT.FIXED):
+                self.LengthDataType(field, DT.ASCII)
+
+
 Descriptions = {}
+ContentTypes = {}
+
 
 Descriptions['1987'] = {
     1 : 'Bitmap' ,
@@ -256,8 +276,6 @@ Descriptions['1987'] = {
     127 : 'Reserved for private use' ,
     128 : 'Message authentication code'
 }
-    
-ContentTypes = {}
 
 ContentTypes['1987'] = {
     1 :   { 'ContentType':'b',     'MaxLen': 8,   'LenType': LT.FIXED },
@@ -325,6 +343,270 @@ ContentTypes['1987'] = {
     63 :  { 'ContentType':'ans',   'MaxLen': 999, 'LenType': LT.LLLVAR},
     64 :  { 'ContentType':'b',     'MaxLen' : 8,  'LenType': LT.FIXED },
     65 :  { 'ContentType' : 'b',   'MaxLen' : 1,  'LenType': LT.FIXED },
+    66 :  { 'ContentType' : 'n',   'MaxLen' : 1,  'LenType': LT.FIXED },
+    67 :  { 'ContentType' : 'n',   'MaxLen' : 2,  'LenType': LT.FIXED },
+    68 :  { 'ContentType' : 'n',   'MaxLen' : 3,  'LenType': LT.FIXED },
+    69 :  { 'ContentType' : 'n',   'MaxLen' : 3,  'LenType': LT.FIXED },
+    70 :  { 'ContentType' : 'n',   'MaxLen' : 3,  'LenType': LT.FIXED },
+    71 :  { 'ContentType' : 'n',   'MaxLen' : 4,  'LenType': LT.FIXED },
+    72 :  { 'ContentType' : 'n',   'MaxLen' : 4,  'LenType': LT.FIXED },
+    73 :  { 'ContentType' : 'n',   'MaxLen' : 6,  'LenType': LT.FIXED },
+    74 :  { 'ContentType' : 'n',   'MaxLen' : 10, 'LenType': LT.FIXED },
+    75 :  { 'ContentType' : 'n',   'MaxLen' : 10, 'LenType': LT.FIXED },
+    76 :  { 'ContentType' : 'n',   'MaxLen' : 10, 'LenType': LT.FIXED },
+    77 :  { 'ContentType' : 'n',   'MaxLen' : 10, 'LenType': LT.FIXED },
+    78 :  { 'ContentType' : 'n',   'MaxLen' : 10, 'LenType': LT.FIXED },
+    79 :  { 'ContentType' : 'n',   'MaxLen' : 10, 'LenType': LT.FIXED },
+    80 :  { 'ContentType' : 'n',   'MaxLen' : 10, 'LenType': LT.FIXED },
+    81 :  { 'ContentType' : 'n',   'MaxLen' : 10, 'LenType': LT.FIXED },
+    82 :  { 'ContentType' : 'n',   'MaxLen' : 12, 'LenType': LT.FIXED },
+    83 :  { 'ContentType' : 'n',   'MaxLen' : 12, 'LenType': LT.FIXED },
+    84 :  { 'ContentType' : 'n',   'MaxLen' : 12, 'LenType': LT.FIXED },
+    85 :  { 'ContentType' : 'n',   'MaxLen' : 12, 'LenType': LT.FIXED },
+    86 :  { 'ContentType' : 'n',   'MaxLen' : 16, 'LenType': LT.FIXED },
+    87 :  { 'ContentType' : 'n',   'MaxLen' : 16, 'LenType': LT.FIXED },
+    88 :  { 'ContentType' : 'n',   'MaxLen' : 16, 'LenType': LT.FIXED },
+    89 :  { 'ContentType' : 'n',   'MaxLen' : 16, 'LenType': LT.FIXED },
+    90 :  { 'ContentType' : 'n',   'MaxLen' : 42, 'LenType': LT.FIXED },
+    91 :  { 'ContentType' : 'an',  'MaxLen' : 1,  'LenType': LT.FIXED },
+    92 :  { 'ContentType' : 'an',  'MaxLen' : 2,  'LenType': LT.FIXED },
+    93 :  { 'ContentType' : 'an',  'MaxLen' : 5,  'LenType': LT.FIXED },
+    94 :  { 'ContentType' : 'an',  'MaxLen' : 7,  'LenType': LT.FIXED },
+    95 :  { 'ContentType' : 'an',  'MaxLen' : 42, 'LenType': LT.FIXED },
+    96 :  { 'ContentType' : 'b',   'MaxLen' : 8,  'LenType': LT.FIXED },
+    97 :  { 'ContentType' : 'an',  'MaxLen' : 17, 'LenType': LT.FIXED },
+    98 :  { 'ContentType' : 'ans', 'MaxLen' : 25, 'LenType': LT.FIXED },
+    99 :  { 'ContentType' : 'n',   'MaxLen' : 11, 'LenType': LT.LLVAR },
+    100 : { 'ContentType' : 'n',   'MaxLen' : 11, 'LenType': LT.LLVAR },
+    101 : { 'ContentType' : 'ans', 'MaxLen' : 17, 'LenType': LT.LLVAR },
+    102 : { 'ContentType' : 'ans', 'MaxLen' : 28, 'LenType': LT.LLVAR },
+    103 : { 'ContentType' : 'ans', 'MaxLen' : 28, 'LenType': LT.LLVAR },
+    104 : { 'ContentType' : 'ans', 'MaxLen' : 100, 'LenType': LT.LLLVAR },
+    105 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    106 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    107 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    108 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    109 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    110 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    111 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    112 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    113 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    114 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    115 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    116 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    117 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    118 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    119 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    120 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    121 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    122 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    123 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    124 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    125 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    126 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    127 : { 'ContentType' : 'ans', 'MaxLen' : 999, 'LenType': LT.LLLVAR },
+    128 : { 'ContentType' : 'b',   'MaxLen' : 8,  'LenType': LT.FIXED }
+}
+
+
+Descriptions['1993'] = {
+    1 : 'Bitmap' ,
+    2 : 'Primary account number (PAN)' ,
+    3 : 'Processing code' ,
+    4 : 'Amount, transaction' ,
+    5 : 'Amount, reconciliation' ,
+    6 : 'Amount, cardholder billing' ,
+    7 : 'Date and time, transmission' ,
+    8 : 'Amount, cardholder billing fee' ,
+    9 : 'Conversion rate, reconciliation' ,
+    10 : 'Conversion rate, cardholder billing' ,
+    11 : 'System trace audit number' ,
+    12 : 'Date and time, local transaction' ,
+    13 : 'Date, effective' ,
+    14 : 'Date, expiration' ,
+    15 : 'Date, settlement' ,
+    16 : 'Date, conversion' ,
+    17 : 'Date, capture' ,
+    18 : 'Merchant type' ,
+    19 : 'Country code, acquiring institution' ,
+    20 : 'Country code, primary account numbe' ,
+    21 : 'Country code, forwarding institution' ,
+    22 : 'Point of service data code',
+    23 : 'Card sequence number' ,
+    24 : 'Function code',
+    25 : 'Message reason code ',
+    26 : 'Card acceptor business code ',
+    27 : 'Approval code length ',
+    28 : 'Date, reconciliation ',
+    29 : 'Reconciliation indicator',
+    30 : 'Amounts, original',
+    31 : 'Acquirer reference data',
+    32 : 'Acquiring institution identification code' ,
+    33 : 'Forwarding institution identification code' ,
+    34 : 'Primary account number, extended' ,
+    35 : 'Track 2 data' ,
+    36 : 'Track 3 data' ,
+    37 : 'Retrieval reference number' ,
+    38 : 'Approval code' ,
+    39 : 'Action code' ,
+    40 : 'Service code',
+    41 : 'Card acceptor terminal identification' ,
+    42 : 'Card acceptor identification code' ,
+    43 : 'Card acceptor name/location' ,
+    44 : 'Additional response data' ,
+    45 : 'Track 1 data' ,
+    46 : 'Amounts, fees',
+    47 : 'Additional data - national' ,
+    48 : 'Additional data - private' ,
+    49 : 'Currency code, transaction' ,
+    50 : 'Currency code, reconciliation' ,
+    51 : 'Currency code, cardholder billing' ,
+    52 : 'Personal identification number data' ,
+    53 : 'Security related control information' ,
+    54 : 'Amounts, additional' ,
+    55 : 'Integrated circuit card system related data',
+    56 : 'Original data elements',
+    57 : 'Authorization life cycle code',
+    58 : 'Authorizing agent institution identification code',
+    59 : 'Transport data',
+    60 : 'Reserved for national use' ,
+    61 : 'Reserved for national use' ,
+    62 : 'Reserved for private use' ,
+    63 : 'Reserved for private use' ,
+    64 : 'Message authentication code field',
+    65 : 'Reserved for IS0 use',
+    66 : 'Amounts, original fees',
+    67 : 'Extended payment data',
+    68 : 'Country code, receiving institution ',
+    69 : 'Country code, settlement institution',
+    70 : 'Country code, authorizing agent institution',
+    71 : 'Message number',
+    72 : 'Data record ',
+    73 : 'Date, action',
+    74 : 'Credits, number',
+    75 : 'Credits, reversal number',
+    76 : 'Debits, number',
+    77 : 'Debits, reversal number',
+    78 : 'Transfer, number',
+    79 : 'Transfer, reversal number',
+    80 : 'Inquiries, number',
+    81 : 'Authorizations, number',
+    82 : 'Inquiries, reversal number',
+    83 : 'Payments, number',
+    84 : 'Payments, reversal number',
+    85 : 'Fee collections, number ',
+    86 : 'Credits, amount',
+    87 : 'Credits, reversal amount',
+    88 : 'Debits, amount',
+    89 : 'Debits, reversal amount',
+    90 : 'Authorizations, reversal number',
+    91 : 'Country code, transaction destination institution ',
+    92 : 'Country code, transaction originator institution ',
+    93 : 'Transaction destination institution identification code',
+    94 : 'Transaction originator institution identification code ',
+    95 : 'Card issuer reference data',
+    96 : 'Key management data',
+    97 : 'Amount, net reconciliation',
+    98 : 'Payee',
+    99 : 'Settlement institution identitifaction code',
+    100 : 'Receiving institution identification code',
+    101 : 'File name',
+    102 : 'Account identification 1',
+    103 : 'Account identification 2',
+    104 : 'Transaction description',
+    105 : 'Credits, chargeback amount',
+    106 : 'Debits, chargeback amount',
+    107 : 'Credits, chargeback number',
+    108 : 'Debits, chargeback number',
+    109 : 'Credits, fee amounts',
+    110 : 'Debits, fee amounts',
+    111 : 'Reserved for ISO use',
+    112 : 'Reserved for ISO use',
+    113 : 'Reserved for ISO use',
+    114 : 'Reserved for ISO use',
+    115 : 'Reserved for ISO use',
+    116 : 'Reserved for national use',
+    117 : 'Reserved for national use',
+    118 : 'Reserved for national use',
+    119 : 'Reserved for national use',
+    120 : 'Reserved for national use',
+    121 : 'Reserved for national use',
+    122 : 'Reserved for national us',
+    123 : 'Reserved for private use',
+    124 : 'Reserved for private use',
+    125 : 'Reserved for private use',
+    126 : 'Reserved for private use',
+    127 : 'Reserved for private use',
+    128 : 'Message authentication code field',
+}
+
+
+ContentTypes['1993'] = {
+    1 :   { 'ContentType':'b',     'MaxLen': 8,   'LenType': LT.FIXED },
+    2 :   { 'ContentType':'n',     'MaxLen': 19,  'LenType': LT.LLVAR },
+    3 :   { 'ContentType':'n',     'MaxLen': 6,   'LenType': LT.FIXED },
+    4 :   { 'ContentType':'n',     'MaxLen': 12,  'LenType': LT.FIXED },
+    5 :   { 'ContentType':'n',     'MaxLen': 12,  'LenType': LT.FIXED },
+    6 :   { 'ContentType':'n',     'MaxLen': 12,  'LenType': LT.FIXED },
+    7 :   { 'ContentType':'n',     'MaxLen': 10,  'LenType': LT.FIXED },
+    8 :   { 'ContentType':'n',     'MaxLen': 8,   'LenType': LT.FIXED },
+    9 :   { 'ContentType':'n',     'MaxLen': 8,   'LenType': LT.FIXED },
+    10 :  { 'ContentType':'n',     'MaxLen': 8,   'LenType': LT.FIXED },
+    11 :  { 'ContentType':'n',     'MaxLen': 6,   'LenType': LT.FIXED },
+    12 :  { 'ContentType':'n',     'MaxLen': 12,  'LenType': LT.FIXED },
+    13 :  { 'ContentType':'n',     'MaxLen': 4,   'LenType': LT.FIXED },
+    14 :  { 'ContentType':'n',     'MaxLen': 4,   'LenType': LT.FIXED },
+    15 :  { 'ContentType':'n',     'MaxLen': 6,   'LenType': LT.FIXED },
+    16 :  { 'ContentType':'n',     'MaxLen': 4,   'LenType': LT.FIXED },
+    17 :  { 'ContentType':'n',     'MaxLen': 4,   'LenType': LT.FIXED },
+    18 :  { 'ContentType':'n',     'MaxLen': 4,   'LenType': LT.FIXED },
+    19 :  { 'ContentType':'n',     'MaxLen': 3,   'LenType': LT.FIXED },
+    20 :  { 'ContentType':'n',     'MaxLen': 3,   'LenType': LT.FIXED },
+    21 :  { 'ContentType':'n',     'MaxLen': 3,   'LenType': LT.FIXED },
+    22 :  { 'ContentType':'an',    'MaxLen': 12,  'LenType': LT.FIXED },
+    23 :  { 'ContentType':'n',     'MaxLen': 3,   'LenType': LT.FIXED },
+    24 :  { 'ContentType':'n',     'MaxLen': 3,   'LenType': LT.FIXED },
+    25 :  { 'ContentType':'n',     'MaxLen': 4,   'LenType': LT.FIXED },
+    26 :  { 'ContentType':'n',     'MaxLen': 4,   'LenType': LT.FIXED },
+    27 :  { 'ContentType':'n',     'MaxLen': 1,   'LenType': LT.FIXED },
+    28 :  { 'ContentType':'n',     'MaxLen': 6,   'LenType': LT.FIXED },
+    29 :  { 'ContentType':'n',     'MaxLen': 3,   'LenType': LT.FIXED },
+    30 :  { 'ContentType':'n',     'MaxLen': 24,  'LenType': LT.FIXED },
+    31 :  { 'ContentType':'an',    'MaxLen': 31,  'LenType': LT.LLVAR },
+    32 :  { 'ContentType':'n',     'MaxLen': 11,  'LenType': LT.LLVAR },
+    33 :  { 'ContentType':'n',     'MaxLen': 11,  'LenType': LT.LLVAR },
+    34 :  { 'ContentType':'ns',    'MaxLen': 28,  'LenType': LT.LLVAR },
+    35 :  { 'ContentType':'z',     'MaxLen': 37,  'LenType': LT.LLVAR },
+    36 :  { 'ContentType':'z',     'MaxLen': 104, 'LenType': LT.LLLVAR},
+    37 :  { 'ContentType':'an',    'MaxLen': 12,  'LenType': LT.FIXED },
+    38 :  { 'ContentType':'an',    'MaxLen': 6,   'LenType': LT.FIXED },
+    39 :  { 'ContentType':'n',     'MaxLen': 3,   'LenType': LT.FIXED },
+    40 :  { 'ContentType':'n',     'MaxLen': 3,   'LenType': LT.FIXED },
+    41 :  { 'ContentType':'ans',   'MaxLen': 8,   'LenType': LT.FIXED },
+    42 :  { 'ContentType':'ans',   'MaxLen': 15,  'LenType': LT.FIXED },
+    43 :  { 'ContentType':'ans',   'MaxLen': 99,  'LenType': LT.LLVAR },
+    44 :  { 'ContentType':'ans',   'MaxLen': 99,  'LenType': LT.LLVAR },
+    45 :  { 'ContentType':'ans',   'MaxLen': 76,  'LenType': LT.LLVAR },
+    46 :  { 'ContentType':'ans',   'MaxLen': 204, 'LenType': LT.LLLVAR},
+    47 :  { 'ContentType':'an',    'MaxLen': 999, 'LenType': LT.LLLVAR},
+    48 :  { 'ContentType':'an',    'MaxLen': 999, 'LenType': LT.LLLVAR},
+    49 :  { 'ContentType':'an',    'MaxLen': 3,   'LenType': LT.FIXED },
+    50 :  { 'ContentType':'an',    'MaxLen': 3,   'LenType': LT.FIXED },
+    51 :  { 'ContentType':'an',    'MaxLen': 3,   'LenType': LT.FIXED },
+    52 :  { 'ContentType':'b',     'MaxLen': 8,   'LenType': LT.FIXED },
+    53 :  { 'ContentType':'b',     'MaxLen': 48,  'LenType': LT.FIXED },
+    54 :  { 'ContentType':'ans',   'MaxLen': 120, 'LenType': LT.LLLVAR},
+    55 :  { 'ContentType':'b',     'MaxLen': 255, 'LenType': LT.LLLVAR},
+    56 :  { 'ContentType':'n',     'MaxLen': 35,  'LenType': LT.LLLVAR},
+    57 :  { 'ContentType':'n',     'MaxLen': 3,   'LenType': LT.LLLVAR},
+    58 :  { 'ContentType':'n',     'MaxLen': 11,  'LenType': LT.FIXED },
+    59 :  { 'ContentType':'ans',   'MaxLen': 999, 'LenType': LT.LLLVAR},
+    60 :  { 'ContentType':'ans',   'MaxLen': 999, 'LenType': LT.LLLVAR},
+    61 :  { 'ContentType':'ans',   'MaxLen': 999, 'LenType': LT.LLLVAR},
+    62 :  { 'ContentType':'ans',   'MaxLen': 999, 'LenType': LT.LLLVAR},
+    63 :  { 'ContentType':'ans',   'MaxLen': 999, 'LenType': LT.LLLVAR},
+    64 :  { 'ContentType' : 'b',   'MaxLen' : 8,  'LenType': LT.FIXED },
+    65 :  { 'ContentType' : 'b',   'MaxLen' : 8,  'LenType': LT.FIXED },
     66 :  { 'ContentType' : 'n',   'MaxLen' : 1,  'LenType': LT.FIXED },
     67 :  { 'ContentType' : 'n',   'MaxLen' : 2,  'LenType': LT.FIXED },
     68 :  { 'ContentType' : 'n',   'MaxLen' : 3,  'LenType': LT.FIXED },
